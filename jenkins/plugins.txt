@@ -1,0 +1,10 @@
+htmlpublisher:1.25
+rebuild:1.32
+groovy:2.0
+github-branch-source:2.9.3
+email-ext:2.83
+cors-filter:1.1
+build-user-vars-plugin:1.8
+ws-cleanup:0.41
+matrix-auth:3.1
+postbuildscript:2.11.0

@@ -1,0 +1,20 @@
+version: '3.6'
+services:
+  jenkins:
+    build:
+      context: .
+      dockerfile: DockerfileJenkins
+    ports:
+      - '9090:8080'
+      - '50000:50000'
+      - '465:465'
+    secrets:
+      - jenkins-user
+      - jenkins-pass
+    environment:
+      - TZ=Asia/Kolkata
+secrets:
+  jenkins-user:
+    file: ./jenkinsusername.txt
+  jenkins-pass:
+    file: ./jenkinspassword.txt

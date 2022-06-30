@@ -1,0 +1,11 @@
+node_modules/
+.vscode/
+*.log
+test-results/
+test.sqlite
+coverage/
+.env.dev
+logs/
+test-reports/
+yarn.lock
+.DS_Store
