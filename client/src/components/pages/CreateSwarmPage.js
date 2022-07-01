@@ -373,7 +373,7 @@ class CreateSwarmPage extends Component {
               onFwInput={e => this.handleKpiValChange(e)} />
             <FwCheckbox
               className='fw-mt-28 fw-ml-16'
-              name="addResponseAutoStop"
+              name="addErrorAutoStop"
               onFwChange={this.handleAutoStopChange}
             >Auto Stop</FwCheckbox>
           </div>
@@ -452,7 +452,7 @@ class CreateSwarmPage extends Component {
             {this.state.inputcsvfile
               ? this.state.inputcsvfile.map((item, index) => (
                 <div key={index}>
-                  <label>MAPITestData_staging.csv<sup style={{ color: 'red', fontSize: '1rem' }}>*</sup></label>
+                  <label>{item}<sup style={{ color: 'red', fontSize: '1rem' }}>*</sup></label>
                   <div className={Styles.fileArea}>
                     <input
                       type="file"
