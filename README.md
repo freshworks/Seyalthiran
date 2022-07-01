@@ -69,7 +69,7 @@ The following tools are essential for setting up Seyalthiran in your local envir
 Clone the Seyalthiran repository
 
 ```
-git clone git@github.com:freshworks/Seyalthiran.git
+git clone https://github.com/freshworks/Seyalthiran.git
 ```
 
 <span style="text-decoration:underline;">1. Setting up analytics</span>
