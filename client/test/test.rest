@@ -1,0 +1,34 @@
+GET http://localhost:3000/api/jenkins/allProducts HTTP/1.1
+
+###
+
+POST http://localhost:3000/api/jenkins/recentSwarms HTTP/1.1
+content-type: application/json
+
+{
+    "productname": "simple-demo"
+}
+
+###
+
+POST http://localhost:3000/api/jenkins/createSwarm
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="selectedProd"
+
+simple-demo
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="jmxfile"; filename="google.jmx"
+Content-Type: application/octet-stream
+
+< ../../jenkins/google.jmx
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="testname"
+
+rest_client
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="email"
+
+testemail@gmail.com
+------WebKitFormBoundary7MA4YWxkTrZu0gW--

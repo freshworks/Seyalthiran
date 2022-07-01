@@ -1,0 +1,6 @@
+version: '3.6'
+services:
+  jenkins:
+    volumes:
+      - /var/lib/jenkins:/var/jenkins_home
+      - '~/keys:/keys'

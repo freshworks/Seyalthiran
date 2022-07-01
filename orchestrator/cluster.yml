@@ -1,0 +1,11 @@
+version: '2'
+services:
+  swarms:
+    image: freshworks/seyalthiran-jmeter:latest
+    mem_limit: 950m
+    ports:
+      - 1099:1099
+      - 50000:50000
+      - 60000:60000
+    volumes:
+      - /tmp:/tmp

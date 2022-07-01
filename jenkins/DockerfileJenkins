@@ -1,0 +1,83 @@
+FROM jenkins/jenkins:2.332.2-alpine-jdk8
+
+ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
+
+COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
+RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
+
+# Init script for jenkins set up
+COPY jenkins-init.groovy /usr/share/jenkins/ref/init.groovy.d/jenkins-init.groovy
+
+# First time building of jenkins with the preconfigured job
+# Simple demo job for local testing - does not use ECS cluster
+COPY demo_swarm.xml /usr/share/jenkins/ref/jobs/simple-demo/config.xml
+
+# Below job will not run in local setup uses ECS cluster setup
+COPY demo_swarm_cluster.xml /usr/share/jenkins/ref/jobs/cluster-demo/config.xml
+
+ENV JMETER_VERSION apache-jmeter-5.4.3
+ENV JMETER_HOME /opt/$JMETER_VERSION
+ENV PATH $PATH:$JMETER_HOME/bin
+ENV CMDRUNNER_VERSION 2.2
+ENV PLUGINMGR_VERSION 1.4
+
+USER root
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
+# Install the required tools for jmeter and aws-cli
+RUN apk add --update --no-cache \
+  curl \
+  openssh-client \
+  tzdata \
+  fontconfig \
+  ttf-dejavu \
+  groff
+
+# Install the required tools and aws cli
+RUN apk add --no-cache \
+        python3 \
+        py3-pip \
+    && pip3 install --upgrade pip \
+    && pip3 install --no-cache-dir \
+        awscli \
+    && rm -rf /var/cache/apk/*
+
+ENV AWS_DEFAULT_REGION us-west-2
+
+# Install ecs-cli
+RUN curl -o /usr/local/bin/ecs-cli https://amazon-ecs-cli.s3.amazonaws.com/ecs-cli-linux-amd64-latest
+RUN chmod +x /usr/local/bin/ecs-cli
+
+# Install groovy to execute groovy scripts in execute shell build step
+RUN wget https://repo1.maven.org/maven2/org/codehaus/groovy/groovy-binary/2.4.0-beta-4/groovy-binary-2.4.0-beta-4.zip && \
+  unzip groovy-binary-2.4.0-beta-4.zip && \
+  mv groovy-2.4.0-beta-4 /groovy && \
+  rm groovy-binary-2.4.0-beta-4.zip
+
+ENV GROOVY_HOME /groovy
+ENV PATH $GROOVY_HOME/bin/:$PATH
+
+WORKDIR /opt
+
+# install JMeter and the JMeter Plugins Manager
+RUN curl -O https://archive.apache.org/dist/jmeter/binaries/$JMETER_VERSION.tgz \
+  && tar -xvf $JMETER_VERSION.tgz \
+  && rm $JMETER_VERSION.tgz \
+  && rm -rf $JMETER_VERSION/docs $JMETER_VERSION/printable_docs \
+  && cd $JMETER_HOME/lib \
+  && curl -O https://repo1.maven.org/maven2/kg/apc/cmdrunner/$CMDRUNNER_VERSION/cmdrunner-$CMDRUNNER_VERSION.jar \
+  && cd $JMETER_HOME/lib/ext \
+  && curl -O https://repo1.maven.org/maven2/kg/apc/jmeter-plugins-manager/$PLUGINMGR_VERSION/jmeter-plugins-manager-$PLUGINMGR_VERSION.jar \
+  && java -cp jmeter-plugins-manager-$PLUGINMGR_VERSION.jar org.jmeterplugins.repository.PluginManagerCMDInstaller
+
+WORKDIR /opt/jmeter
+
+# install required plugins
+RUN PluginsManagerCMD.sh install jpgc-prmctl,jpgc-autostop \
+  && sleep 2 \
+  && PluginsManagerCMD.sh status
+
+# copy
+COPY . $JMETER_VERSION
+
+USER jenkins

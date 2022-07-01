@@ -1,0 +1,50 @@
+.flexItem {
+    width: 50%;
+}
+.flexFullWidth {
+    width: 100%;
+}
+.label {
+    display: block;
+    font-size: 12px;
+    color: #475867;
+    font-weight: 600;
+    margin-bottom: 4px;
+    padding-left: 8px;
+    line-height: 20px;
+}
+.wd60 {
+    width: 60%;
+}
+.mnHeight500 {
+    min-height: 500px;
+}
+.textCenter {
+    text-align: center;
+}
+.fileArea {
+    border: 1px dotted gray;
+    padding: 1rem;
+    margin: 1rem;
+}
+.overflow {
+    overflow: auto;
+}
+.compareBtn {
+    margin-top: -10px;
+    float: right;
+}
+
+.navBg {
+    background-color: #183247;
+}
+
+@media only screen and (min-width: 600px) {
+    .btnGroup {
+        padding: 0 3rem;
+    }
+
+    .btnGroupBtn {
+        width: 15rem;
+    }
+}
