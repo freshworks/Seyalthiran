@@ -44,7 +44,7 @@
     "concurrently": "7.1.0",
     "env-cmd": "10.1.0",
     "kill-port": "1.6.1",
-    "nodemon": "2.0.16",
+    "nodemon": "2.0.20",
     "react-router-dom": "6.3.0"
   }
 }
